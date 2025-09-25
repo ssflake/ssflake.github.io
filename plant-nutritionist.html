@@ -1,3 +1,7 @@
+    <!-- 
+    DEVELOPER NOTES:
+    A test on ClaudeAI Artifacts
+    -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -107,33 +111,49 @@
             border: 2px solid #ff6b6b;
         }
 
-        .drop-zone {
+        .plant-drop-zone {
             position: absolute;
-            bottom: 20px;
+            top: 50%;
             left: 50%;
-            transform: translateX(-50%);
-            width: 200px;
-            height: 60px;
+            transform: translate(-50%, -50%);
+            width: 180px;
+            height: 180px;
             border: 3px dashed #4CAF50;
-            border-radius: 15px;
-            background: rgba(255,255,255,0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: #4CAF50;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
             transition: all 0.3s ease;
+            z-index: 1;
         }
 
-        .drop-zone:hover {
+        .plant-drop-zone:hover {
             background: rgba(76,175,80,0.2);
             border-width: 4px;
         }
 
-        .drop-zone.correct {
-            background: rgba(76,175,80,0.4);
+        .plant-drop-zone.drag-over {
+            background: rgba(76,175,80,0.3);
             border-color: #2E7D32;
-            border-style: solid;
+            border-width: 4px;
+        }
+
+        .hint-text {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255,255,255,0.9);
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            color: #4CAF50;
+            border: 2px solid #4CAF50;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translateX(-50%) scale(1); }
+            50% { transform: translateX(-50%) scale(1.05); }
         }
 
         .fertilizers-container {
@@ -374,14 +394,15 @@
         <div class="game-area">
             <div class="plant-container">
                 <div class="plant-display">
+                    <div class="plant-drop-zone" id="plantDropZone"></div>
                     <div class="plant-emoji" id="plantEmoji">🌿</div>
                     <div class="plant-face" id="plantFace">😊</div>
                     <div class="sparkles" id="sparkles">✨</div>
                     <div class="symptom-text" id="symptomText">
                         Loading plant scenario...
                     </div>
-                    <div class="drop-zone" id="dropZone">
-                        Drop Fertilizer Here!
+                    <div class="hint-text" id="hintText">
+                        Drop fertilizer onto the plant!
                     </div>
                 </div>
             </div>
@@ -468,17 +489,17 @@
 
         function setupDragAndDrop() {
             const fertilizers = document.querySelectorAll('.fertilizer');
-            const dropZone = document.getElementById('dropZone');
+            const plantDropZone = document.getElementById('plantDropZone');
 
             fertilizers.forEach(fertilizer => {
                 fertilizer.addEventListener('dragstart', handleDragStart);
                 fertilizer.addEventListener('dragend', handleDragEnd);
             });
 
-            dropZone.addEventListener('dragover', handleDragOver);
-            dropZone.addEventListener('drop', handleDrop);
-            dropZone.addEventListener('dragenter', handleDragEnter);
-            dropZone.addEventListener('dragleave', handleDragLeave);
+            plantDropZone.addEventListener('dragover', handleDragOver);
+            plantDropZone.addEventListener('drop', handleDrop);
+            plantDropZone.addEventListener('dragenter', handleDragEnter);
+            plantDropZone.addEventListener('dragleave', handleDragLeave);
         }
 
         function handleDragStart(e) {
@@ -501,12 +522,12 @@
         function handleDragEnter(e) {
             e.preventDefault();
             if (!isAnswered) {
-                this.style.background = 'rgba(76,175,80,0.3)';
+                this.classList.add('drag-over');
             }
         }
 
         function handleDragLeave(e) {
-            this.style.background = 'rgba(255,255,255,0.3)';
+            this.classList.remove('drag-over');
         }
 
         function handleDrop(e) {
@@ -514,7 +535,7 @@
             
             if (isAnswered) return;
             
-            this.style.background = 'rgba(255,255,255,0.3)';
+            this.classList.remove('drag-over');
             
             const droppedNutrient = e.dataTransfer.getData('text/plain');
             const correctNutrient = scenarios[currentScenario].deficiency;
@@ -523,17 +544,20 @@
             const plantFace = document.getElementById('plantFace');
             const sparkles = document.getElementById('sparkles');
             const nextBtn = document.getElementById('nextBtn');
+            const hintText = document.getElementById('hintText');
             
             isAnswered = true;
             
             if (droppedNutrient === correctNutrient) {
                 // Correct answer!
-                this.classList.add('correct');
                 score++;
                 document.getElementById('score').textContent = score;
                 
                 feedback.textContent = `✅ Perfect! ${scenarios[currentScenario].explanation}`;
                 feedback.className = 'feedback correct';
+                
+                // Hide hint and show success
+                hintText.style.display = 'none';
                 
                 // Happy plant animation
                 plantEmoji.classList.add('healthy');
@@ -564,7 +588,7 @@
                 // Reset after 2 seconds
                 setTimeout(() => {
                     isAnswered = false;
-                    feedback.textContent = 'Try a different fertilizer!';
+                    feedback.textContent = 'Try a different fertilizer on the plant!';
                     feedback.className = 'feedback';
                 }, 2000);
             }
@@ -579,17 +603,19 @@
             const scenario = scenarios[currentScenario];
             const plantEmoji = document.getElementById('plantEmoji');
             const symptomText = document.getElementById('symptomText');
-            const dropZone = document.getElementById('dropZone');
+            const plantDropZone = document.getElementById('plantDropZone');
             const feedback = document.getElementById('feedback');
             const nextBtn = document.getElementById('nextBtn');
+            const hintText = document.getElementById('hintText');
             
             plantEmoji.textContent = scenario.plant;
             symptomText.textContent = scenario.symptom;
-            dropZone.classList.remove('correct');
-            dropZone.style.background = 'rgba(255,255,255,0.3)';
-            feedback.textContent = 'Drag a fertilizer to help the plant!';
+            plantDropZone.classList.remove('drag-over');
+            feedback.textContent = 'Drag a fertilizer onto the plant to help it!';
             feedback.className = 'feedback';
             nextBtn.style.display = 'none';
+            hintText.style.display = 'block';
+            hintText.textContent = 'Drop fertilizer onto the plant!';
             
             isAnswered = false;
         }
