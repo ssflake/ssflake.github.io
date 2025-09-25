@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NPK Plant Nutritionist</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #87CEEB, #98FB98);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .game-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .game-area {
+            display: flex;
+            padding: 20px;
+            gap: 20px;
+            flex-wrap: wrap;
+            min-height: 500px;
+        }
+
+        .plant-container {
+            flex: 1.5;
+            min-width: 350px;
+            max-width: 500px;
+            position: relative;
+            background: linear-gradient(to bottom, #87CEEB, #90EE90);
+            border-radius: 15px;
+            padding: 15px;
+            border: 3px solid #4CAF50;
+        }
+
+        .plant-display {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .plant-emoji {
+            font-size: 8em;
+            margin-bottom: 20px;
+            transition: all 0.5s ease;
+            position: relative;
+        }
+
+        .plant-face {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.3em;
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .plant-face.show {
+            opacity: 1;
+            animation: bounce 0.8s ease-in-out;
+        }
+
+        .symptom-text {
+            background: rgba(255,255,255,0.9);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #333;
+            border: 2px solid #ff6b6b;
+        }
+
+        .drop-zone {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 60px;
+            border: 3px dashed #4CAF50;
+            border-radius: 15px;
+            background: rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #4CAF50;
+            transition: all 0.3s ease;
+        }
+
+        .drop-zone:hover {
+            background: rgba(76,175,80,0.2);
+            border-width: 4px;
+        }
+
+        .drop-zone.correct {
+            background: rgba(76,175,80,0.4);
+            border-color: #2E7D32;
+            border-style: solid;
+        }
+
+        .fertilizers-container {
+            flex: 1;
+            min-width: 280px;
+            max-width: 320px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .fertilizers-title {
+            background: #4CAF50;
+            color: white;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .fertilizer-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .fertilizer {
+            background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: grab;
+            font-weight: bold;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            min-height: 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .fertilizer.nitrogen {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+        }
+
+        .fertilizer.phosphorus {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+
+        .fertilizer.potassium {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+        }
+
+        .fertilizer:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+
+        .fertilizer:active {
+            cursor: grabbing;
+            transform: scale(0.95);
+        }
+
+        .fertilizer.dragging {
+            opacity: 0.7;
+            transform: rotate(5deg);
+        }
+
+        .fertilizer-symbol {
+            font-size: 1.5em;
+            margin-bottom: 5px;
+        }
+
+        .score-board {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            border: 2px solid #4CAF50;
+            margin-top: auto;
+        }
+
+        .score {
+            font-size: 1.3em;
+            color: #4CAF50;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .feedback {
+            font-size: 1em;
+            margin: 8px 0;
+            min-height: 40px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .feedback.correct {
+            color: #4CAF50;
+        }
+
+        .feedback.incorrect {
+            color: #f44336;
+        }
+
+        .next-btn, .reset-btn {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .reset-btn {
+            background: linear-gradient(135deg, #FF6B6B, #FF8E53);
+        }
+
+        .next-btn:hover, .reset-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .celebration {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #333;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            z-index: 1000;
+            display: none;
+        }
+
+        .celebration.show {
+            display: block;
+            animation: bounce 0.6s ease-in-out;
+        }
+
+        .sparkles {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2em;
+            opacity: 0;
+            animation: sparkle 1s ease-out;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        @keyframes sparkle {
+            0% { opacity: 0; transform: translateX(-50%) translateY(0) scale(0.5); }
+            50% { opacity: 1; transform: translateX(-50%) translateY(-20px) scale(1.2); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(-40px) scale(0.8); }
+        }
+
+        @keyframes healthyGlow {
+            0% { filter: brightness(1); }
+            50% { filter: brightness(1.3) drop-shadow(0 0 20px #4CAF50); }
+            100% { filter: brightness(1); }
+        }
+
+        .plant-emoji.healthy {
+            animation: healthyGlow 1s ease-in-out;
+        }
+
+        @media (max-width: 768px) {
+            .game-area {
+                flex-direction: column;
+                padding: 15px;
+                gap: 15px;
+            }
+            
+            .plant-container {
+                min-width: unset;
+                max-width: unset;
+                order: 2;
+            }
+            
+            .fertilizers-container {
+                min-width: unset;
+                max-width: unset;
+                order: 1;
+            }
+            
+            .plant-display {
+                height: 300px;
+            }
+            
+            .plant-emoji {
+                font-size: 6em;
+            }
+            
+            .fertilizer-options {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="header">
+            <h1>🌱 NPK Plant Nutritionist 🧪</h1>
+            <p>Help sick plants by dragging the right fertilizer to cure their deficiency!</p>
+        </div>
+        
+        <div class="game-area">
+            <div class="plant-container">
+                <div class="plant-display">
+                    <div class="plant-emoji" id="plantEmoji">🌿</div>
+                    <div class="plant-face" id="plantFace">😊</div>
+                    <div class="sparkles" id="sparkles">✨</div>
+                    <div class="symptom-text" id="symptomText">
+                        Loading plant scenario...
+                    </div>
+                    <div class="drop-zone" id="dropZone">
+                        Drop Fertilizer Here!
+                    </div>
+                </div>
+            </div>
+            
+            <div class="fertilizers-container">
+                <div class="fertilizers-title">🧪 Choose Your Fertilizer</div>
+                
+                <div class="fertilizer-options">
+                    <div class="fertilizer nitrogen" draggable="true" data-nutrient="N">
+                        <div class="fertilizer-symbol">N</div>
+                        <div>Nitrogen</div>
+                        <small>For green growth</small>
+                    </div>
+                    <div class="fertilizer phosphorus" draggable="true" data-nutrient="P">
+                        <div class="fertilizer-symbol">P</div>
+                        <div>Phosphorus</div>
+                        <small>For roots & flowers</small>
+                    </div>
+                    <div class="fertilizer potassium" draggable="true" data-nutrient="K">
+                        <div class="fertilizer-symbol">K</div>
+                        <div>Potassium</div>
+                        <small>For strong stems</small>
+                    </div>
+                </div>
+                
+                <div class="score-board">
+                    <div class="score">Score: <span id="score">0</span>/5</div>
+                    <div class="feedback" id="feedback">Drag a fertilizer to help the plant!</div>
+                    <button class="next-btn" id="nextBtn" onclick="nextScenario()" style="display: none;">🌿 Next Plant</button>
+                    <button class="reset-btn" onclick="resetGame()">🔄 Reset Game</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="celebration" id="celebration">
+        🎉 Congratulations! 🎉<br>
+        You're a plant nutrition expert!
+    </div>
+
+    <script>
+        let currentScenario = 0;
+        let score = 0;
+        let isAnswered = false;
+
+        const scenarios = [
+            {
+                plant: "🌿",
+                deficiency: "N",
+                symptom: "The leaves are turning yellow and growth is slow. The plant needs more green, leafy growth!",
+                explanation: "Nitrogen (N) helps plants grow green leaves and stems. Yellow leaves often mean nitrogen deficiency!"
+            },
+            {
+                plant: "🌸",
+                deficiency: "P",
+                symptom: "The plant has poor flowering and weak root development. It's struggling to bloom!",
+                explanation: "Phosphorus (P) is essential for root development and flower production. It helps plants bloom beautifully!"
+            },
+            {
+                plant: "🌾",
+                deficiency: "K",
+                symptom: "The stem is weak and the leaf edges are brown. The plant can't stand up straight!",
+                explanation: "Potassium (K) strengthens plant stems and helps with water regulation. It keeps plants strong and healthy!"
+            },
+            {
+                plant: "🥬",
+                deficiency: "N",
+                symptom: "This leafy plant is pale green and growing very slowly. It needs more nutrients for leafy growth!",
+                explanation: "Nitrogen (N) is crucial for leafy vegetables. It promotes the green chlorophyll that makes leaves healthy!"
+            },
+            {
+                plant: "🌻",
+                deficiency: "P",
+                symptom: "The sunflower has a small, weak flower head and poor seed development. Something's wrong with its reproduction!",
+                explanation: "Phosphorus (P) is vital for seed and flower development. Sunflowers need lots of P to produce big, healthy flower heads!"
+            }
+        ];
+
+        // Initialize game
+        document.addEventListener('DOMContentLoaded', function() {
+            loadScenario();
+            setupDragAndDrop();
+        });
+
+        function setupDragAndDrop() {
+            const fertilizers = document.querySelectorAll('.fertilizer');
+            const dropZone = document.getElementById('dropZone');
+
+            fertilizers.forEach(fertilizer => {
+                fertilizer.addEventListener('dragstart', handleDragStart);
+                fertilizer.addEventListener('dragend', handleDragEnd);
+            });
+
+            dropZone.addEventListener('dragover', handleDragOver);
+            dropZone.addEventListener('drop', handleDrop);
+            dropZone.addEventListener('dragenter', handleDragEnter);
+            dropZone.addEventListener('dragleave', handleDragLeave);
+        }
+
+        function handleDragStart(e) {
+            if (isAnswered) {
+                e.preventDefault();
+                return;
+            }
+            this.classList.add('dragging');
+            e.dataTransfer.setData('text/plain', this.dataset.nutrient);
+        }
+
+        function handleDragEnd(e) {
+            this.classList.remove('dragging');
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+        }
+
+        function handleDragEnter(e) {
+            e.preventDefault();
+            if (!isAnswered) {
+                this.style.background = 'rgba(76,175,80,0.3)';
+            }
+        }
+
+        function handleDragLeave(e) {
+            this.style.background = 'rgba(255,255,255,0.3)';
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            
+            if (isAnswered) return;
+            
+            this.style.background = 'rgba(255,255,255,0.3)';
+            
+            const droppedNutrient = e.dataTransfer.getData('text/plain');
+            const correctNutrient = scenarios[currentScenario].deficiency;
+            const feedback = document.getElementById('feedback');
+            const plantEmoji = document.getElementById('plantEmoji');
+            const plantFace = document.getElementById('plantFace');
+            const sparkles = document.getElementById('sparkles');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            isAnswered = true;
+            
+            if (droppedNutrient === correctNutrient) {
+                // Correct answer!
+                this.classList.add('correct');
+                score++;
+                document.getElementById('score').textContent = score;
+                
+                feedback.textContent = `✅ Perfect! ${scenarios[currentScenario].explanation}`;
+                feedback.className = 'feedback correct';
+                
+                // Happy plant animation
+                plantEmoji.classList.add('healthy');
+                plantFace.classList.add('show');
+                
+                // Sparkle effect
+                sparkles.style.opacity = '1';
+                sparkles.style.animation = 'sparkle 1s ease-out';
+                
+                // Show next button
+                nextBtn.style.display = 'inline-block';
+                
+                // Reset animations after they complete
+                setTimeout(() => {
+                    plantEmoji.classList.remove('healthy');
+                    sparkles.style.opacity = '0';
+                    sparkles.style.animation = '';
+                }, 1000);
+                
+                setTimeout(() => {
+                    plantFace.classList.remove('show');
+                }, 2000);
+                
+            } else {
+                feedback.textContent = `❌ Not quite right! This plant needs ${correctNutrient} fertilizer. Try again!`;
+                feedback.className = 'feedback incorrect';
+                
+                // Reset after 2 seconds
+                setTimeout(() => {
+                    isAnswered = false;
+                    feedback.textContent = 'Try a different fertilizer!';
+                    feedback.className = 'feedback';
+                }, 2000);
+            }
+        }
+
+        function loadScenario() {
+            if (currentScenario >= scenarios.length) {
+                showCelebration();
+                return;
+            }
+            
+            const scenario = scenarios[currentScenario];
+            const plantEmoji = document.getElementById('plantEmoji');
+            const symptomText = document.getElementById('symptomText');
+            const dropZone = document.getElementById('dropZone');
+            const feedback = document.getElementById('feedback');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            plantEmoji.textContent = scenario.plant;
+            symptomText.textContent = scenario.symptom;
+            dropZone.classList.remove('correct');
+            dropZone.style.background = 'rgba(255,255,255,0.3)';
+            feedback.textContent = 'Drag a fertilizer to help the plant!';
+            feedback.className = 'feedback';
+            nextBtn.style.display = 'none';
+            
+            isAnswered = false;
+        }
+
+        function nextScenario() {
+            currentScenario++;
+            loadScenario();
+        }
+
+        function resetGame() {
+            currentScenario = 0;
+            score = 0;
+            isAnswered = false;
+            document.getElementById('score').textContent = '0';
+            document.getElementById('celebration').classList.remove('show');
+            loadScenario();
+        }
+
+        function showCelebration() {
+            const celebration = document.getElementById('celebration');
+            celebration.classList.add('show');
+            
+            setTimeout(() => {
+                celebration.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
