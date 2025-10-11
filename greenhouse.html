@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Minecraft Greenhouse</title>
+
+    <!-- Load A-Frame and plugins - SAME AS WORKING TEMPLATE -->
+    <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+    <script src="https://unpkg.com/aframe-thumb-controls-component@1.1.0/dist/aframe-thumb-controls-component.min.js"></script>
+    <script src="https://rawgit.com/fernandojsg/aframe-teleport-controls/master/dist/aframe-teleport-controls.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.min.js"></script>
+    <script src="https://recast-api.donmccurdy.com/aframe-inspector-plugin-recast.js"></script>
+  </head>
+  <body>
+    <a-scene loading-screen="dotsColor: #7cb342; backgroundColor: #ffffff00">
+      <a-assets>
+        <!-- No external assets needed -->
+      </a-assets>
+
+      <!-- Environment -->
+      
+      <!-- Ground - Grass Plane with darker green -->
+      <a-plane color="#558b2f"
+               position="0 0 0" 
+               rotation="-90 0 0"
+               width="50" 
+               height="50"
+               scale="1 1 1">
+      </a-plane>
+
+      <!-- Greenhouse Structure -->
+      
+      <!-- Glass walls - Front with DOOR -->
+      <a-plane color="#4dd0e1" 
+               opacity="0.3" 
+               width="3" 
+               height="3" 
+               position="-3 1.5 -4.5"
+               side="double">
+      </a-plane>
+      
+      <!-- Door frame -->
+      <a-box color="#6d4c41" width="2.2" height="0.2" depth="0.2" position="0 2.8 -4.5"></a-box>
+      <a-box color="#6d4c41" width="0.2" height="2.8" depth="0.2" position="-1 1.4 -4.5"></a-box>
+      <a-box color="#6d4c41" width="0.2" height="2.8" depth="0.2" position="1 1.4 -4.5"></a-box>
+      <a-box color="#6d4c41" width="2.2" height="0.2" depth="0.2" position="0 0 -4.5"></a-box>
+      
+      <!-- Door panels -->
+      <a-box color="#8d6e63" width="0.9" height="2.4" depth="0.15" position="-0.5 1.4 -4.55"></a-box>
+      <a-box color="#8d6e63" width="0.9" height="2.4" depth="0.15" position="0.5 1.4 -4.55"></a-box>
+      
+      <!-- Door handles -->
+      <a-box color="#ffd54f" width="0.1" height="0.15" depth="0.1" position="-0.2 1.5 -4.65"></a-box>
+      <a-box color="#ffd54f" width="0.1" height="0.15" depth="0.1" position="0.8 1.5 -4.65"></a-box>
+      
+      <a-plane color="#4dd0e1" 
+               opacity="0.3" 
+               width="3" 
+               height="3" 
+               position="3 1.5 -4.5"
+               side="double">
+      </a-plane>
+
+      <!-- Glass walls - Back -->
+      <a-plane color="#4dd0e1" 
+               opacity="0.3" 
+               width="9" 
+               height="3" 
+               position="0 1.5 4.5"
+               side="double">
+      </a-plane>
+
+      <!-- Glass walls - Left -->
+      <a-plane color="#4dd0e1" 
+               opacity="0.3" 
+               width="9" 
+               height="3" 
+               position="-4.5 1.5 0" 
+               rotation="0 90 0"
+               side="double">
+      </a-plane>
+
+      <!-- Glass walls - Right -->
+      <a-plane color="#4dd0e1" 
+               opacity="0.3" 
+               width="9" 
+               height="3" 
+               position="4.5 1.5 0" 
+               rotation="0 90 0"
+               side="double">
+      </a-plane>
+
+      <!-- Glass roof - more visible with border -->
+      <a-plane color="#4dd0e1" 
+               opacity="0.5" 
+               width="9" 
+               height="9" 
+               position="0 3.5 0" 
+               rotation="-90 0 0"
+               side="double">
+      </a-plane>
+      
+      <!-- Roof frame border for visibility -->
+      <a-box color="#546e7a" width="9.2" height="0.15" depth="0.15" position="0 3.5 -4.5"></a-box>
+      <a-box color="#546e7a" width="9.2" height="0.15" depth="0.15" position="0 3.5 4.5"></a-box>
+      <a-box color="#546e7a" width="0.15" height="0.15" depth="9.2" position="-4.5 3.5 0"></a-box>
+      <a-box color="#546e7a" width="0.15" height="0.15" depth="9.2" position="4.5 3.5 0"></a-box>
+
+      <!-- Window frames -->
+      <a-box color="#546e7a" width="0.15" height="3" depth="0.2" position="-3 1.5 -4.4"></a-box>
+      <a-box color="#546e7a" width="0.15" height="3" depth="0.2" position="-1.5 1.5 -4.4"></a-box>
+      <a-box color="#546e7a" width="0.15" height="3" depth="0.2" position="0 1.5 -4.4"></a-box>
+      <a-box color="#546e7a" width="0.15" height="3" depth="0.2" position="1.5 1.5 -4.4"></a-box>
+      <a-box color="#546e7a" width="0.15" height="3" depth="0.2" position="3 1.5 -4.4"></a-box>
+      <a-box color="#546e7a" width="9" height="0.15" depth="0.2" position="0 2.5 -4.4"></a-box>
+      
+      <!-- Side window frames -->
+      <a-box color="#546e7a" width="0.2" height="3" depth="0.15" position="-4.4 1.5 -2"></a-box>
+      <a-box color="#546e7a" width="0.2" height="3" depth="0.15" position="-4.4 1.5 0"></a-box>
+      <a-box color="#546e7a" width="0.2" height="3" depth="0.15" position="-4.4 1.5 2"></a-box>
+      
+      <a-box color="#546e7a" width="0.2" height="3" depth="0.15" position="4.4 1.5 -2"></a-box>
+      <a-box color="#546e7a" width="0.2" height="3" depth="0.15" position="4.4 1.5 0"></a-box>
+      <a-box color="#546e7a" width="0.2" height="3" depth="0.15" position="4.4 1.5 2"></a-box>
+      
+      <!-- Back window frames -->
+      <a-box color="#546e7a" width="0.15" height="3" depth="0.2" position="-3 1.5 4.4"></a-box>
+      <a-box color="#546e7a" width="0.15" height="3" depth="0.2" position="0 1.5 4.4"></a-box>
+      <a-box color="#546e7a" width="0.15" height="3" depth="0.2" position="3 1.5 4.4"></a-box>
+
+      <!-- Plants and Pots -->
+      
+      <!-- Pot 1 - Leafy plant -->
+      <a-entity position="-2.5 0 -2.5">
+        <a-cylinder color="#d4693c" height="0.6" radius="0.35" position="0 0.3 0"></a-cylinder>
+        <a-cylinder color="#5d4037" height="0.05" radius="0.33" position="0 0.6 0"></a-cylinder>
+        <a-box color="#558b2f" width="0.2" height="0.9" depth="0.2" position="0 1.05 0"></a-box>
+        <a-box color="#81c784" width="0.5" height="0.4" depth="0.5" position="0 1.6 0"></a-box>
+      </a-entity>
+
+      <!-- Pot 2 - Sunflower -->
+      <a-entity position="2.5 0 -2.5">
+        <a-cylinder color="#d4693c" height="0.6" radius="0.35" position="0 0.3 0"></a-cylinder>
+        <a-cylinder color="#5d4037" height="0.05" radius="0.33" position="0 0.6 0"></a-cylinder>
+        <a-box color="#558b2f" width="0.2" height="0.7" depth="0.2" position="0 0.95 0"></a-box>
+        <a-box color="#ffeb3b" width="0.4" height="0.4" depth="0.4" position="0 1.4 0"></a-box>
+      </a-entity>
+
+      <!-- Pot 3 - Rose -->
+      <a-entity position="-2.5 0 2.5">
+        <a-cylinder color="#d4693c" height="0.6" radius="0.35" position="0 0.3 0"></a-cylinder>
+        <a-cylinder color="#5d4037" height="0.05" radius="0.33" position="0 0.6 0"></a-cylinder>
+        <a-box color="#558b2f" width="0.2" height="0.8" depth="0.2" position="0 1.0 0"></a-box>
+        <a-box color="#e91e63" width="0.4" height="0.4" depth="0.4" position="0 1.5 0"></a-box>
+      </a-entity>
+
+      <!-- Pot 4 - Tulip -->
+      <a-entity position="2.5 0 2.5">
+        <a-cylinder color="#d4693c" height="0.6" radius="0.35" position="0 0.3 0"></a-cylinder>
+        <a-cylinder color="#5d4037" height="0.05" radius="0.33" position="0 0.6 0"></a-cylinder>
+        <a-box color="#558b2f" width="0.15" height="0.6" depth="0.15" position="0 0.85 0"></a-box>
+        <a-box color="#ff5722" width="0.3" height="0.35" depth="0.3" position="0 1.25 0"></a-box>
+      </a-entity>
+
+      <!-- Tall plant 1 -->
+      <a-entity position="-1 0 -1">
+        <a-cylinder color="#8d6e63" height="0.5" radius="0.3" position="0 0.25 0"></a-cylinder>
+        <a-cylinder color="#5d4037" height="0.05" radius="0.28" position="0 0.5 0"></a-cylinder>
+        <a-box color="#558b2f" width="0.18" height="1.3" depth="0.18" position="0 1.15 0"></a-box>
+        <a-box color="#81c784" width="0.6" height="0.5" depth="0.6" position="0 1.9 0"></a-box>
+      </a-entity>
+
+      <!-- Tall plant 2 -->
+      <a-entity position="1 0 1">
+        <a-cylinder color="#8d6e63" height="0.5" radius="0.3" position="0 0.25 0"></a-cylinder>
+        <a-cylinder color="#5d4037" height="0.05" radius="0.28" position="0 0.5 0"></a-cylinder>
+        <a-box color="#2e7d32" width="0.18" height="1.1" depth="0.18" position="0 1.05 0"></a-box>
+        <a-box color="#ffeb3b" width="0.35" height="0.35" depth="0.35" position="0 1.7 0"></a-box>
+      </a-entity>
+
+      <!-- Garden Tools -->
+      
+      <!-- Shovel -->
+      <a-entity position="-3.5 0 -3" rotation="0 0 20">
+        <a-cylinder color="#8d6e63" height="1.2" radius="0.06" position="0 0.6 0"></a-cylinder>
+        <a-box color="#78909c" width="0.3" height="0.5" depth="0.15" position="0 1.25 0"></a-box>
+      </a-entity>
+
+      <!-- Hoe -->
+      <a-entity position="3.5 0 -3" rotation="0 0 -20">
+        <a-cylinder color="#8d6e63" height="1.1" radius="0.06" position="0 0.55 0"></a-cylinder>
+        <a-box color="#78909c" width="0.5" height="0.12" depth="0.12" position="0 1.05 0"></a-box>
+      </a-entity>
+
+      <!-- Watering can -->
+      <a-entity position="-3 0 2.5">
+        <a-box color="#2196f3" width="0.5" height="0.35" depth="0.35" position="0 0.175 0"></a-box>
+        <a-cylinder color="#2196f3" height="0.4" radius="0.08" position="0.35 0.25 0" rotation="0 0 -45"></a-cylinder>
+      </a-entity>
+
+      <!-- Bucket -->
+      <a-entity position="3 0 2.5">
+        <a-cylinder color="#607d8b" height="0.4" radius-bottom="0.25" radius-top="0.3" position="0 0.2 0"></a-cylinder>
+      </a-entity>
+
+      <!-- Hanging Lamps -->
+      
+      <!-- Lamp 1 -->
+      <a-entity position="-2 3.2 -2">
+        <a-cylinder color="#333333" height="0.6" radius="0.04" position="0 0.3 0"></a-cylinder>
+        <a-box color="#ffeb99" width="0.35" height="0.35" depth="0.35" position="0 0 0"></a-box>
+        <a-box color="#fff9c4" width="0.25" height="0.25" depth="0.25" position="0 0 0"></a-box>
+      </a-entity>
+
+      <!-- Lamp 2 -->
+      <a-entity position="2 3.2 2">
+        <a-cylinder color="#333333" height="0.6" radius="0.04" position="0 0.3 0"></a-cylinder>
+        <a-box color="#ffeb99" width="0.35" height="0.35" depth="0.35" position="0 0 0"></a-box>
+        <a-box color="#fff9c4" width="0.25" height="0.25" depth="0.25" position="0 0 0"></a-box>
+      </a-entity>
+      
+      <!-- Additional decorative elements -->
+      
+      <!-- Small flowers on ground -->
+      <a-entity position="-1.5 0 -2">
+        <a-box color="#ff4081" width="0.15" height="0.15" depth="0.15" position="0 0.08 0"></a-box>
+        <a-box color="#558b2f" width="0.05" height="0.3" depth="0.05" position="0 0.15 0"></a-box>
+      </a-entity>
+      
+      <a-entity position="1.5 0 -1.5">
+        <a-box color="#ffeb3b" width="0.15" height="0.15" depth="0.15" position="0 0.08 0"></a-box>
+        <a-box color="#558b2f" width="0.05" height="0.3" depth="0.05" position="0 0.15 0"></a-box>
+      </a-entity>
+      
+      <a-entity position="0.5 0 1.5">
+        <a-box color="#e040fb" width="0.15" height="0.15" depth="0.15" position="0 0.08 0"></a-box>
+        <a-box color="#558b2f" width="0.05" height="0.3" depth="0.05" position="0 0.15 0"></a-box>
+      </a-entity>
+      
+      <!-- Stepping stones path -->
+      <a-box color="#78909c" width="0.6" height="0.05" depth="0.6" position="-0.8 0.03 -1.2"></a-box>
+      <a-box color="#78909c" width="0.6" height="0.05" depth="0.6" position="0 0.03 -0.5"></a-box>
+      <a-box color="#78909c" width="0.6" height="0.05" depth="0.6" position="0.8 0.03 0.2"></a-box>
+      <a-box color="#78909c" width="0.6" height="0.05" depth="0.6" position="-0.3 0.03 0.9"></a-box>
+      
+      <!-- Tool rack on wall -->
+      <a-box color="#8d6e63" width="1.5" height="0.15" depth="0.15" position="-3.6 1.2 -2.7"></a-box>
+      
+      <!-- Small crates/storage -->
+      <a-entity position="3.2 0 3.2">
+        <a-box color="#8d6e63" width="0.5" height="0.5" depth="0.5" position="0 0.25 0"></a-box>
+        <a-box color="#6d4c41" width="0.48" height="0.48" depth="0.48" position="0 0.25 0"></a-box>
+      </a-entity>
+      
+      <a-entity position="3.2 0.5 3.2">
+        <a-box color="#8d6e63" width="0.5" height="0.5" depth="0.5" position="0 0.25 0"></a-box>
+        <a-box color="#6d4c41" width="0.48" height="0.48" depth="0.48" position="0 0.25 0"></a-box>
+      </a-entity>
+      
+      <!-- More plants - small seedlings -->
+      <a-entity position="-3.5 0 0.5">
+        <a-cylinder color="#d4693c" height="0.3" radius="0.2" position="0 0.15 0"></a-cylinder>
+        <a-box color="#81c784" width="0.15" height="0.25" depth="0.15" position="0 0.4 0"></a-box>
+      </a-entity>
+      
+      <a-entity position="-3.5 0 -0.5">
+        <a-cylinder color="#d4693c" height="0.3" radius="0.2" position="0 0.15 0"></a-cylinder>
+        <a-box color="#66bb6a" width="0.15" height="0.2" depth="0.15" position="0 0.35 0"></a-box>
+      </a-entity>
+      
+      <a-entity position="3.5 0 0.5">
+        <a-cylinder color="#d4693c" height="0.3" radius="0.2" position="0 0.15 0"></a-cylinder>
+        <a-box color="#ffeb3b" width="0.2" height="0.2" depth="0.2" position="0 0.35 0"></a-box>
+      </a-entity>
+      
+      <a-entity position="3.5 0 -0.5">
+        <a-cylinder color="#d4693c" height="0.3" radius="0.2" position="0 0.15 0"></a-cylinder>
+        <a-box color="#ff5722" width="0.15" height="0.2" depth="0.15" position="0 0.35 0"></a-box>
+      </a-entity>
+      
+      <!-- Shelf with pots -->
+      <a-box color="#8d6e63" width="2" height="0.15" depth="0.4" position="-3.8 1 3"></a-box>
+      <a-box color="#795548" width="0.1" height="1" depth="0.1" position="-4.7 0.5 2.8"></a-box>
+      <a-box color="#795548" width="0.1" height="1" depth="0.1" position="-4.7 0.5 3.2"></a-box>
+      <a-box color="#795548" width="0.1" height="1" depth="0.1" position="-2.9 0.5 2.8"></a-box>
+      <a-box color="#795548" width="0.1" height="1" depth="0.1" position="-2.9 0.5 3.2"></a-box>
+      
+      <!-- Small pots on shelf -->
+      <a-entity position="-4.3 1.1 3">
+        <a-cylinder color="#d4693c" height="0.2" radius="0.12" position="0 0.1 0"></a-cylinder>
+        <a-box color="#558b2f" width="0.08" height="0.3" depth="0.08" position="0 0.3 0"></a-box>
+      </a-entity>
+      
+      <a-entity position="-3.8 1.1 3">
+        <a-cylinder color="#d4693c" height="0.2" radius="0.12" position="0 0.1 0"></a-cylinder>
+        <a-box color="#e91e63" width="0.15" height="0.15" depth="0.15" position="0 0.28 0"></a-box>
+      </a-entity>
+      
+      <a-entity position="-3.3 1.1 3">
+        <a-cylinder color="#d4693c" height="0.2" radius="0.12" position="0 0.1 0"></a-cylinder>
+        <a-box color="#ffeb3b" width="0.12" height="0.12" depth="0.12" position="0 0.26 0"></a-box>
+      </a-entity>
+      
+      <!-- Garden beds/raised planters -->
+      <a-entity position="0 0 3.5">
+        <a-box color="#8d6e63" width="4" height="0.4" depth="0.8" position="0 0.2 0"></a-box>
+        <a-box color="#5d4037" width="3.8" height="0.05" depth="0.78" position="0 0.4 0"></a-box>
+        <a-box color="#81c784" width="0.3" height="0.6" depth="0.3" position="-1.5 0.6 0"></a-box>
+        <a-box color="#66bb6a" width="0.3" height="0.5" depth="0.3" position="-0.8 0.55 0"></a-box>
+        <a-box color="#558b2f" width="0.3" height="0.7" depth="0.3" position="0 0.65 0"></a-box>
+        <a-box color="#ffeb3b" width="0.25" height="0.25" depth="0.25" position="0.8 0.53 0"></a-box>
+        <a-box color="#ff5722" width="0.25" height="0.25" depth="0.25" position="1.5 0.53 0"></a-box>
+      </a-entity>
+      
+      <!-- Hanging baskets -->
+      <a-entity position="-3 2.8 -2.5">
+        <a-cylinder color="#333333" height="0.3" radius="0.02" position="0 0.15 0"></a-cylinder>
+        <a-cylinder color="#8d6e63" height="0.3" radius="0.2" position="0 -0.15 0"></a-cylinder>
+        <a-box color="#e91e63" width="0.25" height="0.25" depth="0.25" position="0 -0.1 0"></a-box>
+      </a-entity>
+      
+      <a-entity position="3 2.8 2.5">
+        <a-cylinder color="#333333" height="0.3" radius="0.02" position="0 0.15 0"></a-cylinder>
+        <a-cylinder color="#8d6e63" height="0.3" radius="0.2" position="0 -0.15 0"></a-cylinder>
+        <a-box color="#ffeb3b" width="0.25" height="0.25" depth="0.25" position="0 -0.1 0"></a-box>
+      </a-entity>
+      
+      <!-- Corner posts -->
+      <a-box color="#6d4c41" width="0.2" height="3.5" depth="0.2" position="-4.4 1.75 -4.4"></a-box>
+      <a-box color="#6d4c41" width="0.2" height="3.5" depth="0.2" position="4.4 1.75 -4.4"></a-box>
+      <a-box color="#6d4c41" width="0.2" height="3.5" depth="0.2" position="-4.4 1.75 4.4"></a-box>
+      <a-box color="#6d4c41" width="0.2" height="3.5" depth="0.2" position="4.4 1.75 4.4"></a-box>
+      
+      <!-- Decorative border at base -->
+      <a-box color="#6d4c41" width="9" height="0.1" depth="0.3" position="0 0.05 -4.4"></a-box>
+      <a-box color="#6d4c41" width="9" height="0.1" depth="0.3" position="0 0.05 4.4"></a-box>
+      <a-box color="#6d4c41" width="0.3" height="0.1" depth="9" position="-4.4 0.05 0"></a-box>
+      <a-box color="#6d4c41" width="0.3" height="0.1" depth="9" position="4.4 0.05 0"></a-box>
+
+      <!-- Ambient Light -->
+      <a-entity light="color: #ffffff; intensity: 0.8; type: ambient"></a-entity>
+
+      <!-- Directional Light -->
+      <a-entity light="color: #ffffeb; intensity: 0.5; type: directional" position="5 10 7"></a-entity>
+
+      <!-- Clouds -->
+      <a-box color="#ffffff" width="3" height="1.2" depth="1.5" position="-8 6 -10" opacity="0.9"></a-box>
+      <a-box color="#ffffff" width="4" height="1.5" depth="2" position="10 7 -12" opacity="0.9"></a-box>
+      <a-box color="#ffffff" width="3.5" height="1.3" depth="1.8" position="-10 5.5 8" opacity="0.9"></a-box>
+
+      <!-- Text Instructions -->
+      <a-text value="Computer: WASD + mouse to move"
+              width="6"
+              position="-2 2.8 -4.3"
+              rotation="0 0 0"
+              color="#2c3e50"
+              align="center"
+              material="depthTest: false">
+      </a-text>
+
+      <a-text value="Mobile: tap, hold and point"
+              width="6"
+              position="2 2.8 -4.3"
+              rotation="0 0 0"
+              color="#2c3e50"
+              align="center"
+              material="depthTest: false">
+      </a-text>
+
+      <!-- Sky -->
+      <a-sky color="#4fc3f7" rotation="0 0 0"></a-sky>
+
+      <!-- Movement Rig with Controllers - SAME STRUCTURE AS TEMPLATE -->
+      <a-entity id="cameraRig"
+                movement-controls="constrainToNavMesh: false;"
+                navigator="cameraRig: #cameraRig; cameraHead: #head; collisionEntities: .collision; ignoreEntities: .clickable"
+                position="0 0 8" 
+                rotation="0 0 0">
+
+        <!-- Camera -->
+        <a-entity id="head"
+                  camera="active: true"
+                  position="0 1.6 -4"
+                  look-controls="pointerLockEnabled: true; reverseMouseDrag: false">
+        </a-entity>
+
+        <!-- Left Controller -->
+        <a-entity id="leftHand"
+                  hand-controls="hand: left; handModelStyle: lowPoly; color: #15ACCF"
+                  teleport-controls="cameraRig: #cameraRig; teleportOrigin: #head; button: trigger; curveShootingSpeed: 18; landingMaxAngle: 60"
+                  visible="true">
+        </a-entity>
+
+        <!-- Right Controller -->
+        <a-entity id="rightHand"
+                  hand-controls="hand: right; handModelStyle: lowPoly; color: #15ACCF"
+                  laser-controls
+                  raycaster="showLine: true; far: 10; interval: 0; objects: .clickable, a-link;"
+                  line="color: #7cfc00; opacity: 0.5"
+                  visible="true">
+        </a-entity>
+      </a-entity>
+    </a-scene>
+  </body>
+</html>
